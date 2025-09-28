@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Azura Launcher — Single Script</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0b1020;--glass:rgba(255,255,255,0.04);--accent1:#7c3aed;--accent2:#06b6d4}
+    *{box-sizing:border-box;font-family:Inter,system-ui,Arial,sans-serif}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#040511 0%,#07102a 60%);color:#e6eef8}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+    .card{width:960px;max-width:96%;border-radius:18px;padding:28px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter:blur(8px);box-shadow:0 10px 40px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    .header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .logo{width:66px;height:66px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:white;box-shadow:0 6px 20px rgba(124,58,237,0.18)}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:4px 0 0;color:rgba(230,238,248,0.75);font-size:13px}
+
+    .content{display:grid;grid-template-columns:1fr 340px;gap:20px}
+    .panel{background:var(--glass);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
+
+    pre{margin:0;background:transparent;border-radius:8px;padding:12px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+    .controls{display:flex;flex-direction:column;gap:12px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:700}
+    .btn-copy{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021026}
+    .btn-download{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--accent2)}
+    .btn-launch{background:linear-gradient(90deg,#10b981,#06b6d4);color:#021026;font-size:15px;padding:14px;border-radius:12px}
+
+    .meta{font-size:13px;color:rgba(230,238,248,0.7);display:flex;flex-direction:column;gap:8px}
+
+    .footer{margin-top:14px;font-size:12px;color:rgba(230,238,248,0.6)}
+
+    .toast{position:fixed;right:22px;bottom:22px;background:#06122a;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 40px rgba(2,6,23,0.6);display:none}
+
+    @media (max-width:880px){.content{grid-template-columns:1fr} .panel.right{order:2}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="main">
+      <div class="header">
+        <div class="logo">AZ</div>
+        <div>
+          <h1>Azura Hub - by chrxzrbx</h1>
+          <p class="lead">Universal Roblox Script</p>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="panel left">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <strong>Script (read-only)</strong>
+            <div style="font-size:12px;color:rgba(230,238,248,0.6)">Raw source: GitHub</div>
+          </div>
+
+          <pre id="codeBlock" spellcheck="false">loadstring(game:HttpGet("https://raw.githubusercontent.com/tinetic/Azura-Hub/refs/heads/main/MainLauncherScript.lua"))()</pre>
+
+          <div class="footer">Tip: Use the <strong>Copy</strong> button and paste into your executor. This page does <em>not</em> run the script itself.</div>
+        </div>
+
+        <div class="panel right">
+          <div class="meta">
+            <div><strong>Actions</strong></div>
+            <div class="controls">
+              <button class="btn btn-copy" id="copyBtn">📋 Copy to clipboard</button>
+              <button class="btn btn-download" id="downloadBtn">⬇️ Download .txt</button>
+              <button class="btn btn-launch" id="launchBtn">🚀 Copy & Ready</button>
+            </div>
+
+            <div style="margin-top:8px"><strong>Instructions</strong>
+              <ol style="padding-left:18px;margin:6px 0 0 0;color:rgba(230,238,248,0.75);font-size:13px">
+                <li>Open your executor of choice.</li>
+                <li>Press <em>Copy</em> or <em>Download</em>.</li>
+                <li>Paste into the executor and run.</li>
+              </ol>
+            </div>
+
+            <div style="margin-top:8px"><strong>Safety</strong>
+              <p style="margin:6px 0 0 0;color:rgba(230,238,248,0.6);font-size:12px">I don't host executors or run the script for you. Use at your own risk and only with accounts you are okay risking.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <script>
+    const scriptText = document.getElementById('codeBlock').innerText.trim();
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const launchBtn = document.getElementById('launchBtn');
+    const toast = document.getElementById('toast');
+
+    function showToast(msg='Copied to clipboard'){
+      toast.textContent = msg; toast.style.display = 'block';
+      setTimeout(()=>{ toast.style.display = 'none'; },1500);
+    }
+
+    copyBtn.addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(scriptText);
+        showToast('Copied to clipboard');
+      }catch(e){
+        // fallback
+        const ta = document.createElement('textarea'); ta.value = scriptText; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('Copied');
+      }
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      const blob = new Blob([scriptText], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'azura_launcher_script.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      showToast('Downloaded');
+    });
+
+    launchBtn.addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(scriptText); showToast('Copied — paste in executor'); }
+      catch(e){ const ta = document.createElement('textarea'); ta.value = scriptText; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('Copied'); }
+    });
+  </script>
+</body>
+</html>
